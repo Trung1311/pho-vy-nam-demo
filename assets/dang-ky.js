@@ -5,7 +5,8 @@
  * CẤU HÌNH: dán đường link Web app (kết thúc bằng /exec) lấy được khi triển khai Apps Script vào đây.
  * Xem hướng dẫn chi tiết trong file HUONG-DAN-NHAN-DANG-KY.md.
  */
-const DIA_CHI_NHAN_FORM = "DAN_LINK_GOOGLE_APPS_SCRIPT_VAO_DAY";
+const DIA_CHI_NHAN_FORM =
+  "https://script.google.com/macros/s/AKfycbxakl7kHUUkEaK-flkDkWjkZT3cJr_SyWy42-p-nCXQEg8CCypqkBKh7UR1RPfQ59BNRA/exec";
 
 (function () {
   const form = document.getElementById("form-dang-ky");
