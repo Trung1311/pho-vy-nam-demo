@@ -1,2 +1,10 @@
-# Chuyển hướng 301 cho Netlify / Cloudflare Pages (dùng khi chạy trên tên miền thật)
-/dich-vu   /khoa-hoc-day-nau-pho   301
+# Chuyển hướng 301 cho Cloudflare Pages / Netlify: giữ thứ hạng Google của các link trên web cũ (Web30s)
+/dich-vu                 /khoa-hoc-day-nau-pho   301
+/san-pham                /khoa-hoc-day-nau-pho   301
+/san-pham-1732262773     /khoa-hoc-day-nau-pho   301
+/thu-vien-anh            /ve-chung-toi           301
+/minh-bach--bao-mat--hieu-qua  /chinh-sach-bao-mat  301
+/tin-tuc                 /                       301
+/video                   /                       301
+/tim-kiem                /                       301
+/trang-tuy-chinh         /                       301
