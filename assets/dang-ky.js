@@ -105,9 +105,17 @@ const DIA_CHI_NHAN_FORM =
     }, 20000);
 
     try {
-      const phanHoi = await fetch(DIA_CHI_NHAN_FORM, { method: "POST", body: duLieu, signal: huy.signal });
-      const ketQua = await phanHoi.json();
-      if (!ketQua.ok) throw new Error(ketQua.error || "Lỗi máy chủ");
+      try {
+        const phanHoi = await fetch(DIA_CHI_NHAN_FORM, { method: "POST", body: duLieu, signal: huy.signal });
+        const ketQua = await phanHoi.json();
+        if (!ketQua.ok) throw new Error(ketQua.error || "Lỗi máy chủ");
+      } catch (loi) {
+        // Một số trình duyệt / tiện ích chặn đọc phản hồi từ Google (lỗi CORS) dù dữ liệu vẫn gửi được.
+        // Khi đó gửi lại ở chế độ no-cors: không đọc được kết quả nhưng thông tin vẫn tới bảng tính.
+        if (!(loi instanceof TypeError)) throw loi;
+        console.warn("[Form đăng ký] Không đọc được phản hồi, gửi lại chế độ no-cors:", loi);
+        await fetch(DIA_CHI_NHAN_FORM, { method: "POST", body: duLieu, mode: "no-cors", signal: huy.signal });
+      }
 
       form.hidden = true;
       hopThanhCong.hidden = false;
