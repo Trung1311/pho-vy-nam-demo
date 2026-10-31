@@ -2,3 +2,16 @@
 
 /* Sửa lỗi menu bị xuống dòng ở màn hình 1024–1280px */nav[aria-label="Menu chính"] a{white-space:nowrap}@media (min-width:64rem) and (max-width:80rem){nav[aria-label="Menu chính"] a{padding-inline:.7rem}}
 /* Số hotline không bị ngắt dòng giữa chừng */a.card[href^="tel:"] .text-2xl{white-space:nowrap;font-size:clamp(1.25rem,2.2vw,1.5rem)}
+.text-center .eyebrow:after{content:"";height:1px;width:calc(var(--spacing) * 8);background-color:currentColor;display:inline-block;margin-left:-.18em}
+/* Tối ưu điện thoại */
+@media (max-width:39.99rem){
+.card.p-7{padding:1.25rem}
+.max-w-4xl>li.pl-16{padding-left:3.75rem}
+footer ul a:not(.flex),footer .border-t a{display:inline-block;padding-block:.375rem}
+footer ul a.flex{padding-block:.25rem}
+a.card[href^="mailto:"] span.text-lg{font-size:1rem}
+footer .border-t>.container-x{padding-bottom:8.5rem}
+}
+@media (max-width:63.99rem){
+.grid.grid-cols-2.lg\:grid-cols-3>img:last-child:nth-child(even){grid-column:span 2;aspect-ratio:16/9}
+}
