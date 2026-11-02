@@ -1,0 +1,88 @@
+/* Chỉnh hiển thị cho điện thoại. Không đổi chữ, chỉ đổi cách bày.
+   File này không nằm trong @layer nên thắng các lớp Tailwind ở chinh-sach-bao-mat.*.css. */
+
+/* ---------- chung mọi khổ màn hình ---------- */
+a, button, summary { touch-action: manipulation; -webkit-tap-highlight-color: transparent }
+.btn { transition-property: color, background-color, border-color, box-shadow, transform }
+/* menu điện thoại đang đóng thì ẩn hẳn khung menu */
+details:not([open]) > div { display: none }
+/* dòng căn giữa nằm trong khối chữ căn đều */
+.chu-deu .text-center { text-align: center }
+
+/* ---------- điện thoại và máy tính bảng dọc ---------- */
+@media (max-width: 767px) {
+  /* khoảng cách giữa các khối */
+  .section { padding-block: 3.5rem }
+
+  /* chữ nhỏ dưới logo và các nhãn nhỏ: không dưới 13px cho dễ đọc */
+  header .text-\[11px\] { font-size: 13px; letter-spacing: .04em }
+  main .text-xs { font-size: .8125rem }
+
+  /* nhãn nhỏ có 2 gạch hai bên: thu gọn để không rớt dòng */
+  .eyebrow { font-size: .8125rem; letter-spacing: .1em }
+  .bg-cream-2 .eyebrow { color: var(--color-brand-dark) }
+  .eyebrow::before, .eyebrow::after { width: 1.25rem }
+
+  /* tiêu đề trang: nhỏ lại một chút để không vỡ 4–5 dòng */
+  /* (một số h1 ghi line-height ngay trong thẻ nên cần !important) */
+  main h1 { font-size: clamp(1.625rem, 7.4vw, 2.25rem); line-height: 1.22 !important }
+
+  /* thanh "Trang chủ / ...": giữ 1 dòng, tên dài thì cắt "…" */
+  nav[aria-label="Breadcrumb"] ol { flex-wrap: nowrap }
+  nav[aria-label="Breadcrumb"] li:first-child { flex-shrink: 0; white-space: nowrap }
+  nav[aria-label="Breadcrumb"] li:last-child { min-width: 0 }
+  nav[aria-label="Breadcrumb"] [aria-current] { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap }
+
+  /* trang chủ: khối đầu trang */
+  .hero-chu > .container-x { padding-bottom: 4.5rem; gap: 2.75rem }
+  .hero-chu h1 { font-size: min(7.9vw, 2.25rem); line-height: 1.25 !important }
+  .hero-chu h1 > span { font-size: .9em; margin-top: .35rem }
+
+  /* trang chủ: thẻ thư mục */
+  .thu-muc-luoi { gap: 1.25rem }
+  .thu-muc-than { padding: 1.25rem 1.25rem 1.125rem }
+  .thu-muc-ten { font-size: 1.25rem }
+
+  /* ảnh đứng đầu cột (khối 4 ý ở Quán phở ngon): bỏ khoảng trống thừa phía trên */
+  .lg\:col-span-5 > img.mt-8:first-child { margin-top: 0 }
+
+  /* khối ảnh nền tối (Về chúng tôi): bớt khoảng trống trên đầu */
+  .section.bg-ink .mt-12 { margin-top: 0 }
+
+  /* Khóa học: 13 ý rộng chữ hơn */
+  ol.chu-deu.grid > li { gap: .875rem; padding: 1.125rem 1.125rem 1.125rem 1rem }
+  ol.chu-deu.grid > li > span:first-child { width: 2.25rem; height: 2.25rem; font-size: 1rem }
+
+  /* Liên hệ, Cửa hàng: thẻ bớt đệm */
+  .card.p-7 { padding: 1.375rem }
+
+  /* chân trang gọn lại */
+  footer > .container-x { gap: 2.25rem; padding-block: 3rem }
+  footer ul.space-y-2\.5 { display: grid; grid-template-columns: 1fr 1fr; gap: .625rem 1rem }
+  footer ul.space-y-2\.5 > li { margin: 0 }
+  footer ul.space-y-2\.5 a { display: block; padding-block: .25rem; font-size: .9375rem }
+  footer .border-t .container-x { font-size: .8125rem; padding-bottom: 1.25rem }
+}
+
+/* ---------- khi có nút menu (dưới 1024px) ---------- */
+@media (max-width: 1023px) {
+  /* menu mở: phủ mờ phần trang phía sau, chạm vào đó là đóng menu
+     (header có backdrop-filter nên "fixed" tính theo header, phải tự cho chiều cao) */
+  details[open] > summary::before {
+    content: ""; position: fixed; left: 0; right: 0; top: 4rem; height: 100vh;
+    background: #1c191759; cursor: default;
+  }
+}
+
+/* ---------- riêng điện thoại (dưới 640px) ---------- */
+@media (max-width: 639px) {
+  /* ảnh ghép ở khối đầu trang chủ: ảnh ngang thì khung ngang, đỡ dài */
+  .hero-chu .ml-auto { aspect-ratio: 4 / 3 }
+
+  /* Về chúng tôi: dòng thời gian 4 thế hệ, nới thẻ cho chữ đỡ thưa */
+  ol.chu-deu:not(.grid) { margin-top: 0 }
+  ol.chu-deu:not(.grid) > li { padding-left: 3.25rem; margin-bottom: 2rem }
+  ol.chu-deu:not(.grid) > li > span.absolute { width: 2.5rem; height: 2.5rem; font-size: 1rem }
+  ol.chu-deu:not(.grid) > div.absolute { left: 1.25rem }
+  ol.chu-deu:not(.grid) .card { padding: 1.25rem }
+}
