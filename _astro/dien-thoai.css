@@ -76,9 +76,6 @@ details:not([open]) > div { display: none }
 
 /* ---------- riêng điện thoại (dưới 640px) ---------- */
 @media (max-width: 639px) {
-  /* ảnh ghép ở khối đầu trang chủ: ảnh ngang thì khung ngang, đỡ dài */
-  .hero-chu .ml-auto { aspect-ratio: 4 / 3 }
-
   /* Về chúng tôi: dòng thời gian 4 thế hệ, nới thẻ cho chữ đỡ thưa */
   ol.chu-deu:not(.grid) { margin-top: 0 }
   ol.chu-deu:not(.grid) > li { padding-left: 3.25rem; margin-bottom: 2rem }
