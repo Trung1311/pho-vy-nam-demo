@@ -8,25 +8,21 @@ a, button, summary { touch-action: manipulation; -webkit-tap-highlight-color: tr
 details:not([open]) > div { display: none }
 /* dòng căn giữa nằm trong khối chữ căn đều */
 .chu-deu .text-center { text-align: center }
-/* tên cạnh logo trên cùng: in hoa; dòng "Đặc sản phở bò" dàn đều cho bằng đúng bề ngang tên */
+/* tên cạnh logo trên cùng: in hoa, đậm; dòng "Đặc sản phở bò" dàn đều cho bằng đúng bề ngang tên */
 header .leading-tight { display: inline-block }
-header .leading-tight > :first-child { text-transform: uppercase; letter-spacing: .03em; margin-right: -.03em }
-header .leading-tight > :last-child { margin-top: .2em; text-align: justify; text-align-last: justify }
-@media (min-width: 768px) {
-  header .leading-tight > :last-child { letter-spacing: .2em; margin-right: -.2em }
-}
-@media (min-width: 1024px) {
-  header .leading-tight > :first-child { font-size: 1.375rem }
-  header .leading-tight > :last-child { font-size: 12px }
-}
+header .leading-tight > :first-child { font-size: 1.5rem; font-weight: 800; text-transform: uppercase; letter-spacing: .03em; margin-right: -.03em }
+header .leading-tight > :last-child { margin-top: .2em; margin-right: -.2em; font-size: 13px; letter-spacing: .2em; text-align: justify; text-align-last: justify }
+/* đầu trang nền kem, logo bên trái có bóng nhẹ, vạch xanh – vàng – cam ở mép dưới theo màu logo (kiểu A, người dùng chọn 04/11/2026) */
+header { border-bottom-width: 0; box-shadow: 0 6px 16px -10px #1c191740 }
+header::after { content: ""; position: absolute; left: 0; right: 0; bottom: 0; height: 2px; background: linear-gradient(90deg, var(--color-forest), var(--color-gold) 50%, var(--color-brand)); pointer-events: none }
+header > .container-x > a:first-child > img { border-radius: .6rem; box-shadow: 0 4px 10px -4px #0c3a1f80 }
 
 /* ---------- điện thoại và máy tính bảng dọc ---------- */
 @media (max-width: 767px) {
   /* khoảng cách giữa các khối */
   .section { padding-block: 3.5rem }
 
-  /* chữ nhỏ dưới logo và các nhãn nhỏ: không dưới 13px cho dễ đọc */
-  header .text-\[11px\] { font-size: 13px; letter-spacing: .04em }
+  /* các nhãn nhỏ: không dưới 13px cho dễ đọc */
   main .text-xs { font-size: .8125rem }
 
   /* nhãn nhỏ có 2 gạch hai bên: thu gọn để không rớt dòng */
@@ -75,12 +71,23 @@ header .leading-tight > :last-child { margin-top: .2em; text-align: justify; tex
 
 /* ---------- khi có nút menu (dưới 1024px) ---------- */
 @media (max-width: 1023px) {
+  /* đầu trang: logo + tên bên trái, nút menu bên phải; thanh cao hơn cho logo to */
+  header > .container-x { height: 4.5rem }
+  header > .container-x > a:first-child { gap: .75rem; white-space: nowrap }
+  header > .container-x > a:first-child > img { width: 3.25rem; height: 3.25rem }
+  /* thanh có thêm dòng địa chỉ phía trên (từ 768px) thì menu xổ xuống thấp hơn tương ứng */
+  @media (min-width: 768px) {
+    details[open] > summary::before, details > div.fixed { top: 6.75rem !important }
+  }
+
   /* menu mở: phủ mờ phần trang phía sau, chạm vào đó là đóng menu
      (header có backdrop-filter nên "fixed" tính theo header, phải tự cho chiều cao) */
   details[open] > summary::before {
-    content: ""; position: fixed; left: 0; right: 0; top: 4rem; height: 100vh;
+    content: ""; position: fixed; left: 0; right: 0; top: 4.5rem; height: 100vh;
     background: #1c191759; cursor: default;
   }
+  /* khung menu xổ xuống ngay dưới thanh đầu trang */
+  details > div.fixed { top: 4.5rem }
 }
 
 /* ---------- riêng điện thoại (dưới 640px) ---------- */
