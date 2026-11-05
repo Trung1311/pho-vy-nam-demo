@@ -63,9 +63,6 @@ header > .container-x > a:first-child > img { border-radius: .6rem; box-shadow: 
 
   /* chân trang gọn lại */
   footer > .container-x { gap: 2.25rem; padding-block: 3rem }
-  footer ul.space-y-2\.5 { display: grid; grid-template-columns: 1fr 1fr; gap: .625rem 1rem }
-  footer ul.space-y-2\.5 > li { margin: 0 }
-  footer ul.space-y-2\.5 a { display: block; padding-block: .25rem; font-size: .9375rem }
   footer .border-t .container-x { font-size: .8125rem; padding-bottom: 1.25rem }
 }
 
