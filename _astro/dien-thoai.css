@@ -48,9 +48,6 @@ header > .container-x > a:first-child > img { border-radius: .6rem; box-shadow: 
   .thu-muc-than { padding: 1.25rem 1.25rem 1.125rem }
   .thu-muc-ten { font-size: 1.25rem }
 
-  /* ảnh đứng đầu cột (khối 4 ý ở Quán phở ngon): bỏ khoảng trống thừa phía trên */
-  .lg\:col-span-5 > img.mt-8:first-child { margin-top: 0 }
-
   /* khối ảnh nền tối (Về chúng tôi): bớt khoảng trống trên đầu */
   .section.bg-ink .mt-12 { margin-top: 0 }
 
