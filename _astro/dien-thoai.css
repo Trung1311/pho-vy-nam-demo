@@ -43,9 +43,11 @@ header > .container-x > a:first-child > img { border-radius: .6rem; box-shadow: 
   /* trang chủ: khối đầu trang (cỡ chữ tiêu đề tự khít bề ngang, xem lớp hero-khit trong index.html) */
   .hero-chu > .container-x { padding-bottom: 4.5rem; gap: 2.75rem }
 
-  /* trang chủ: thẻ thư mục */
+  /* trang chủ: thẻ thư mục (kính mờ, ảnh lọt trong khung; thêm .thu-muc để thắng style trong index.html) */
   .thu-muc-luoi { gap: 1.25rem }
-  .thu-muc-than { padding: 1.25rem 1.25rem 1.125rem }
+  .thu-muc-luoi > .thu-muc { padding: .5rem; border-radius: 1.25rem }
+  .thu-muc .thu-muc-anh { border-radius: .875rem }
+  .thu-muc .thu-muc-than { padding: 1.125rem .75rem .625rem }
   .thu-muc-ten { font-size: 1.25rem }
 
   /* khối ảnh nền tối (Về chúng tôi): bớt khoảng trống trên đầu */
