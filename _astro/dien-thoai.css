@@ -104,11 +104,13 @@ header > .container-x > a:first-child > img { border-radius: .6rem; box-shadow: 
 
 /* ---------- điện thoại khổ hẹp (dưới 480px) ---------- */
 @media (max-width: 479px) {
-  /* trang chủ: dòng chữ nhỏ dưới tiêu đề tách 2 dòng, dòng trên dàn đều, dòng dưới kéo gạch vàng tới mép phải */
+  /* trang chủ: dòng chữ nhỏ dưới tiêu đề tách 2 dòng, dòng trên dàn đều, dòng dưới căn giữa có gạch vàng 2 bên (khách yêu cầu căn giữa 07/11/2026) */
   /* (thêm .hero-khit để thắng phần style viết trong index.html, nạp sau file này) */
-  .hero-khit .hero-phu-de { margin-right: -.15em; font-size: min(calc(100cqi / 19.8), 1.25rem); letter-spacing: .15em; white-space: normal; text-align: left; text-align-last: auto }
+  .hero-khit .hero-phu-de { margin-right: -.15em; font-size: min(calc(100cqi / 19.8), 1.25rem); letter-spacing: .15em; white-space: normal; text-align: center; text-align-last: auto }
   .hero-khit .hero-phu-de > span { display: block }
   .hero-khit .hero-phu-de > span:first-child { text-align: justify; text-align-last: justify }
   .hero-khit .hero-phu-de > span:last-child { display: flex; align-items: center; gap: .7em }
-  .hero-khit .hero-phu-de > span:last-child::after { content: ""; flex: 1; height: 1px; margin-right: .15em; background: linear-gradient(90deg, #f5d68a, #f5d68a80) }
+  .hero-khit .hero-phu-de > span:last-child::before { content: ""; flex: 1; height: 1px; background: linear-gradient(90deg, #f5d68a80, #f5d68a) }
+  /* bù khoảng giãn chữ sau chữ cuối cho 2 gạch dài bằng nhau */
+  .hero-khit .hero-phu-de > span:last-child::after { content: ""; flex: 1; height: 1px; margin-left: -.15em; margin-right: .15em; background: linear-gradient(90deg, #f5d68a, #f5d68a80) }
 }
