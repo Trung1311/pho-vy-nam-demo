@@ -53,7 +53,9 @@
 /* khung xem ảnh lớn: phủ kín màn hình */
 #chum-xem { width: 100%; height: 100%; height: 100dvh; max-width: none; max-height: none; margin: 0; padding: 0; border: 0; background: #0f0a05f0; overflow: hidden; touch-action: pinch-zoom }
 #chum-xem::backdrop { background: #0f0a05f0 }
-#chum-xem > img { position: absolute; inset: 0; margin: auto; max-width: 100%; max-height: 100%; width: auto; height: auto; object-fit: contain }
+#chum-xem > img { position: absolute; inset: 0; margin: auto; max-width: 100%; max-height: 100%; width: auto; height: auto; object-fit: contain; transform-origin: 0 0 }
+/* chum-anh.js báo trước tỉ lệ (--tl) và bề ngang (--rong) của ảnh: khung ảnh có sẵn kích thước khi ảnh lớn chưa tải xong */
+#chum-xem > img { width: min(100%, 100vh * var(--tl), var(--rong)); width: min(100%, 100dvh * var(--tl), var(--rong)); aspect-ratio: var(--tl) }
 #chum-xem button { position: absolute; display: flex; align-items: center; justify-content: center; width: 3rem; height: 3rem; padding: 0; border: 0; border-radius: 9999px; background: #00000080; color: #fff; cursor: pointer }
 #chum-xem button:hover { background: #000000b3 }
 #chum-xem button:focus-visible { outline: 3px solid var(--color-gold-light); outline-offset: 2px }
@@ -64,7 +66,13 @@
 #chum-xem .chum-sau { right: .5rem }
 #chum-xem .chum-dem { position: absolute; top: 1.125rem; left: 50%; transform: translateX(-50%); margin: 0; padding: .25rem .75rem; border-radius: 9999px; background: #00000080; font-size: .9375rem; font-weight: 500; color: #fff; pointer-events: none }
 html.chum-mo { overflow: hidden }
+/* mở: nền tối và các nút hiện dần, ảnh phóng ra từ chỗ ảnh nhỏ (xem chum-anh.js); đóng (lớp chum-thu): ngược lại */
 @media (prefers-reduced-motion: no-preference) {
-  #chum-xem[open] { animation: chum-hien .18s ease-out }
-  @keyframes chum-hien { from { opacity: 0 } to { opacity: 1 } }
+  #chum-xem[open] { animation: chum-nen .3s ease-out }
+  #chum-xem[open]::backdrop { animation: chum-nen .3s ease-out }
+  #chum-xem[open] > :not(img) { animation: chum-hien .3s ease-out .12s backwards }
+  @keyframes chum-nen { from { background-color: #0f0a0500 } }
+  @keyframes chum-hien { from { opacity: 0 } }
+  #chum-xem.chum-thu, #chum-xem.chum-thu::backdrop { background-color: #0f0a0500; transition: background-color .3s ease-in }
+  #chum-xem.chum-thu > :not(img) { opacity: 0; transition: opacity .15s }
 }

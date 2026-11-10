@@ -1,4 +1,5 @@
 /* Chùm ảnh: bấm vào ảnh để xem lớn; mũi tên, phím ← → hoặc vuốt để qua ảnh khác trong cùng chùm.
+   Ảnh lớn phóng ra từ đúng chỗ ảnh nhỏ vừa bấm, đóng thì thu về chỗ ảnh nhỏ (máy bật giảm chuyển động thì hiện ngay).
    Không có JavaScript thì mỗi ảnh vẫn là đường dẫn tới ảnh lớn. */
 (function () {
   var cacChum = document.querySelectorAll('[data-chum]');
@@ -23,10 +24,67 @@
   var dem = khung.querySelector('.chum-dem');
   var ds = [];
   var vt = 0;
+  var goc = document.documentElement;
+  var coPhong = !!anh.animate && !(window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches);
+  var dangAn = null;      // ảnh nhỏ đang tạm ẩn (ảnh lớn đang đứng thay chỗ nó)
+  var dangDong = false;
+  var NGUYEN = { transform: 'translate(0px, 0px) scale(1)', clipPath: 'inset(0% 0% 0% 0% round 0px)' };
+
+  // ẩn ảnh nhỏ đang được xem lớn, trả lại ảnh nhỏ đã ẩn trước đó
+  function an(a) {
+    if (dangAn) dangAn.style.visibility = '';
+    dangAn = a;
+    if (a) a.style.visibility = 'hidden';
+  }
+
+  // chỗ của ảnh nhỏ trên màn hình: khung của cả tấm ảnh (tính cả phần bị cắt khuất) và tỉ lệ bị cắt ở 4 cạnh
+  function choAnhNho(a) {
+    var nho = a.querySelector('img');
+    var o = a.getBoundingClientRect();
+    var rong = +nho.getAttribute('width'), cao = +nho.getAttribute('height');
+    if (!rong || !cao || !o.width || !o.height) return null;
+    if (o.bottom < 0 || o.top > window.innerHeight || o.right < 0 || o.left > window.innerWidth) return null;
+    var tl = Math.max(o.width / rong, o.height / cao);
+    var w = rong * tl, h = cao * tl;
+    var chinh = getComputedStyle(nho).objectPosition.split(' ');
+    var px = parseFloat(chinh[0]) / 100, py = parseFloat(chinh[1]) / 100;
+    if (isNaN(px)) px = .5;
+    if (isNaN(py)) py = .5;
+    var x = o.left + (o.width - w) * px, y = o.top + (o.height - h) * py;
+    return { x: x, y: y, w: w, cat: [(o.top - y) / h, (x + w - o.right) / w, (y + h - o.bottom) / h, (o.left - x) / w] };
+  }
+
+  // khung hình đưa ảnh lớn (đang nằm ở "lon") về đúng chỗ ảnh nhỏ
+  function veChoNho(nho, lon) {
+    var k = nho.w / lon.width;
+    return {
+      transform: 'translate(' + (nho.x - lon.left) + 'px, ' + (nho.y - lon.top) + 'px) scale(' + k + ')',
+      clipPath: 'inset(' + nho.cat.map(function (c) { return (Math.max(0, c) * 100).toFixed(3) + '%'; }).join(' ') + ' round ' + (10 / k).toFixed(2) + 'px)'
+    };
+  }
 
   function hien(i) {
     vt = (i + ds.length) % ds.length;
-    anh.src = ds[vt].href;
+    var a = ds[vt], nho = a.querySelector('img');
+    // báo trước tỉ lệ và bề ngang ảnh cho CSS, để khung ảnh lớn có sẵn kích thước khi ảnh chưa tải xong
+    var rong = +nho.getAttribute('width'), cao = +nho.getAttribute('height');
+    if (rong && cao) {
+      anh.style.setProperty('--tl', (rong / cao).toFixed(5));
+      anh.style.setProperty('--rong', rong + 'px');
+    } else {
+      anh.style.removeProperty('--tl');
+      anh.style.removeProperty('--rong');
+    }
+    // hiện ngay ảnh nhỏ đã tải sẵn, ảnh lớn tải xong thì thay vào
+    if (nho.currentSrc && nho.complete && nho.naturalWidth) {
+      anh.src = nho.currentSrc;
+      var lon = new Image();
+      lon.onload = function () { if (khung.open && ds[vt] === a) anh.src = a.href; };
+      lon.src = a.href;
+    } else {
+      anh.src = a.href;
+    }
+    if (coPhong && khung.open) an(a);
     dem.textContent = (vt + 1) + ' / ' + ds.length;
     // tải sẵn 2 ảnh kề bên cho lúc chuyển ảnh khỏi chờ
     [vt + 1, vt - 1].forEach(function (k) {
@@ -41,22 +99,56 @@
         e.preventDefault();
         ds = cacAnh;
         hien(i);
-        document.documentElement.classList.add('chum-mo');
+        goc.classList.add('chum-mo');
         khung.showModal();
+        if (!coPhong) return;
+        // ảnh lớn phóng ra từ chỗ ảnh nhỏ
+        var nho = choAnhNho(a), lon = anh.getBoundingClientRect();
+        if (!nho || !lon.width) return;
+        an(a);
+        anh.animate([veChoNho(nho, lon), NGUYEN], { duration: 380, easing: 'cubic-bezier(.2, .7, .2, 1)' });
       });
     });
   });
 
   khung.querySelector('.chum-truoc').addEventListener('click', function () { hien(vt - 1); });
   khung.querySelector('.chum-sau').addEventListener('click', function () { hien(vt + 1); });
-  khung.querySelector('.chum-dong').addEventListener('click', function () { khung.close(); });
+  khung.querySelector('.chum-dong').addEventListener('click', dong);
+
+  // đóng: ảnh lớn thu về chỗ ảnh nhỏ (nếu ảnh nhỏ đang nằm trong màn hình và không đang phóng to bằng 2 ngón)
+  function dong() {
+    if (dangDong) return;
+    var dangPhong = window.visualViewport && window.visualViewport.scale > 1.01;
+    var nho = coPhong && !dangPhong ? choAnhNho(ds[vt]) : null;
+    var lon = anh.getBoundingClientRect();
+    if (!nho || !lon.width) { khung.close(); return; }
+    dangDong = true;
+    khung.classList.add('chum-thu');
+    var hd = anh.animate([NGUYEN, veChoNho(nho, lon)], { duration: 300, easing: 'cubic-bezier(.4, 0, .2, 1)', fill: 'forwards' });
+    var xong = function () {
+      if (!dangDong) return;
+      dangDong = false;
+      khung.close();
+      hd.cancel();
+    };
+    hd.onfinish = hd.oncancel = xong;
+  }
 
   // bấm vào vùng nền tối ngoài ảnh là đóng
   khung.addEventListener('click', function (e) {
-    if (e.target === khung) khung.close();
+    if (e.target === khung) dong();
+  });
+  // phím Esc
+  khung.addEventListener('cancel', function (e) {
+    if (!coPhong) return;
+    e.preventDefault();
+    dong();
   });
   khung.addEventListener('close', function () {
-    document.documentElement.classList.remove('chum-mo');
+    dangDong = false;
+    an(null);
+    khung.classList.remove('chum-thu');
+    goc.classList.remove('chum-mo');
     anh.removeAttribute('src');
   });
   khung.addEventListener('keydown', function (e) {
